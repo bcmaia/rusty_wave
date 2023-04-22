@@ -5,7 +5,6 @@ pub enum Bit {
     NotSet = 2,
 }
 
-
 impl Bit {
     pub fn toggle(&self) -> Bit {
         match self {

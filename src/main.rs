@@ -1,8 +1,10 @@
 use std::io;
 
 mod bit;
+mod sample;
 
 use bit::Bit;
+use sample::Sample;
 
 fn main() {
 	let a = [1, 3];
