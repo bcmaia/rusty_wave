@@ -5,6 +5,8 @@ pub enum Bit {
     NotSet = 2,
 }
 
+pub type Nibble = [Bit; 4];
+
 impl Bit {
     pub fn toggle(&self) -> Bit {
         match self {
@@ -37,5 +39,38 @@ impl Bit {
         }
    
     	v
+	}
+
+	pub fn define (&self) -> Bit {
+		if Bit::NotSet == *self {Bit::Zero}
+		else {*self}
+	}
+}
+
+
+
+impl Nibble {
+	pub fn define (&self) -> Nibble {
+		[
+			self[0].define(),
+			self[1].define(),
+			self[2].define(),
+			self[2].define(),
+		]
+	}
+
+	pub fn to_nibbles(&Vec<Bit>) -> Vec<Nibble> {
+		let chunks = self.chunks(4);
+	    let mut nibbles = Vec::new();
+
+	    for chunk in chunks {
+	    	let mut nibble = [Bit::NotSet; 4];
+	        for (i, bit) in chunk.iter().enumerate() {
+	        	nibble[i] = *bit;
+	        }
+	        
+	        nibbles.push(nibble.define());
+	    }
+	    nibbles
 	}
 }

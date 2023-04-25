@@ -10,7 +10,7 @@ pub enum Sample {
 }
 
 impl Sample {
-    fn interpolate(last: &Sample, next: &Sample) -> Sample {
+    pub fn interpolate(last: &Sample, next: &Sample) -> Sample {
         let matrix = [
             // last \ next |  NoSignal   		Low        			Mid        			High       			LowToHigh  			LowToMid   			MidToHigh
             /* NoSignal */ [Sample::NoSignal, 	Sample::Low, 		Sample::Mid, 		Sample::High, 		Sample::LowToHigh, 	Sample::LowToMid, 	Sample::MidToHigh],
@@ -25,7 +25,7 @@ impl Sample {
         matrix[*last as usize][*next as usize]
     }
 
-    fn print (&self, border : bool, title : &str) {
+    pub fn print (&self, border : bool, title : &str) {
 		let signals = [
 			"      ┊      ", // 0
 			"┇     ┊      ", // 1

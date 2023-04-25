@@ -11,9 +11,10 @@ pub struct PulsePattern {
 }
 
 pub struct Pulse {
+	title: String,
 	samples : [Sample, PULSE_SIZE],
 }
 
 impl Pulse {
-	
+	pub fn from_pattern ();
 }
