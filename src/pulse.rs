@@ -16,5 +16,22 @@ pub struct Pulse {
 }
 
 impl Pulse {
-	pub fn from_pattern ();
+	pub fn from_pattern (patterns : &PulsePattern) -> Vec<Pulse> {
+		let MID_INDEX = ceil(i/2);
+
+		Pulse {
+			title: patterns.title.clone();
+			samples: (vec![Pulse::Low, PULSE_SIZE])
+				.iter_mut().enumerate().for_each(
+					|(i, x)| *x = 
+						if MID_INDEX > i {
+							patterns.start
+						} else if MID_INDEX == i {
+							Sample::Interpolate(patterns.start, patterns.end)
+						} else {
+							patterns.end
+						}
+				);
+		}
+	}
 }

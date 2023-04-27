@@ -80,13 +80,13 @@ impl Encoding {
 	pub fn new (block : u8, line : u8) {
 		Encoding {
 			line_encoding: match line {
-				1 => nrz,
+				0 => nrz,
 				_ => nrz,
 			},
 			block_encoding: match block {
-				1 => BE_NOP,
-				2 => BE_4B5B,
-				_ => BE_NOP,
+				0 => None,
+				1 => Some(BE_NOP),
+				_ => None,
 			},
 		}
 	}
@@ -96,7 +96,8 @@ impl Encoding {
 		let mut encoded_bits = Vec::new();
 
 		let enc = match self.block_encode {
-			
+			Some(x) => x,
+			None(x) => BE_NOP, // Obs: should not happen, but if it does...
 		}
 		
 		for nibble in nibbles {
@@ -111,12 +112,21 @@ impl Encoding {
 		let mut patterns = Vec::new();
 		let mut state = Bit::Zero;
 		
-		
 		for b in bits {
 			patterns.push(self.line_encode(b, &mut state));
 		}
 
 		patterns
+	}
+
+	pub fn encode (&self, input : &String) -> Vec<Pulse> {
+		let bits = Bit::string_to_bits(input);
+		let bits = match self.block_encode {
+			Some(func) => self.block_encode(&bits),
+			None => bits,
+		};
+		let patterns = self.line_encode(&bits);
+		
 	}
 
 	

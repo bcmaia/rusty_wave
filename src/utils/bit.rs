@@ -1,4 +1,4 @@
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum Bit {
     Zero = 0,
     One = 1,
@@ -10,21 +10,21 @@ pub struct Nibble {
 }
 
 impl Bit {
-    pub fn toggle(&self) -> Bit {
-        match self {
-            Bit::Zero => Bit::One,
-            Bit::One => Bit::Zero,
-            Bit::NotSet => Bit::NotSet,
-        }
-    }
+    // pub fn toggle(&self) -> Bit {
+    //     match self {
+    //         Bit::Zero => Bit::One,
+    //         Bit::One => Bit::Zero,
+    //         Bit::NotSet => Bit::NotSet,
+    //     }
+    // }
 
-    pub fn to_bool (&self) -> bool {
-    	match self {
-    		Bit::Zero => false,
-    		Bit::One => true,
-    		Bit::NotSet => false,
-    	}
-    }
+    // pub fn to_bool (&self) -> bool {
+    // 	match self {
+    // 		Bit::Zero => false,
+    // 		Bit::One => true,
+    // 		Bit::NotSet => false,
+    // 	}
+    // }
 
 	pub fn char_to_bit (c : &char) -> Bit {
 		match c {
@@ -58,7 +58,7 @@ impl Nibble {
 				self.data[0].define(),
 				self.data[1].define(),
 				self.data[2].define(),
-				self.data[2].define(),
+				self.data[3].define(),
 			],
 		}
 	}
@@ -68,9 +68,9 @@ impl Nibble {
 	    let mut nibbles = Vec::new();
 
 	    for chunk in chunks {
-	    	let mut nibble = [Bit::NotSet; 4];
+	    	let mut nibble = Nibble{data: [Bit::NotSet; 4],};
 	        for (i, bit) in chunk.iter().enumerate() {
-	        	nibble[i] = *bit;
+	        	nibble.data[i] = *bit;
 	        }
 	        
 	        nibbles.push(nibble.define());

@@ -1,4 +1,4 @@
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum Sample {
     NoSignal = 0,
     Low = 1,
@@ -10,6 +10,10 @@ pub enum Sample {
 }
 
 impl Sample {
+    // pub fn interpolate_all (samples : &Vec<Sample>) -> &Vec<Sample> {
+
+    // }
+
     pub fn interpolate(last: &Sample, next: &Sample) -> Sample {
         let matrix = [
             // last \ next |  NoSignal   		Low        			Mid        			High       			LowToHigh  			LowToMid   			MidToHigh
