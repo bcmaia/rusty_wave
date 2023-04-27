@@ -1,266 +1,30 @@
-// mod bit;
-// mod sample;
-// mod pulse;
-
-use super::bit::{Bit, Nibble};
-use super::sample::Sample;
-use super::pulse::{PulsePattern, Pulse, PULSE_SIZE, MID_INDEX};
-
-
-type LineEncoding = fn(&Bit, &mut Bit) -> PulsePattern;
-type BlockEncoding = fn(Nibble) -> Vec::<Bit>;
-
-fn nrz (
-	b : &Bit,
-	_state : &mut Bit
-) -> PulsePattern {
-	match b {
-		Bit::Zero => PulsePattern{
-			title: String::from("0"),
-			start: Sample::Low,
-			end: Sample::Low,
-		},
-		Bit::One => PulsePattern{
-			title: String::from("1"),
-			start: Sample::High,
-			end: Sample::High,
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	}
-}
-
-fn nrzi (
-	b : &Bit,
-	last_bit : &mut Bit
-) -> PulsePattern {
-
-	let result = match b {
-		Bit::Zero => if Bit::Zero == *last_bit {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::Low,
-				end: Sample::Low,
-			}
-		} else {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::High,
-				end: Sample::High,
-			}
-		},
-		Bit::One => if Bit::One == *last_bit {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::Low,
-				end: Sample::Low,
-			}
-		} else {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::High,
-				end: Sample::High,
-			}
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	};
-
-	*last_bit = if Sample::High == result.start {Bit::One} else {Bit::Zero};
-
-	result
-}
-
-fn bipolar_ami (
-	b : &Bit,
-	last_bit : &mut Bit
-) -> PulsePattern {
-
-	let result = match b {
-		Bit::Zero => PulsePattern{
-			title: String::from("0"),
-			start: Sample::Mid,
-			end: Sample::Mid,
-		},
-		Bit::One => if Bit::One == *last_bit {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::Low,
-				end: Sample::Low,
-			}
-		} else {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::High,
-				end: Sample::High,
-			}
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	};
-
-	if Sample::High == result.start {*last_bit = Bit::One} 
-	else if Sample::Low == result.start {*last_bit = Bit::Zero}
-
-	result
-}
+use super::{
+	bit::{Bit, Nibble},
+	sample::Sample,
+	pulse::{PulsePattern, Pulse, PULSE_SIZE, MID_INDEX},
+	line_encoders::{
+		LineEncoding, // type
+		nrz, // function
+		nrzi, // function
+		bipolar_ami, // function
+		pseudoternario, // function
+		manchester, // function
+		manchester_dif, // function
+	},
+	block_encoders::{
+		BlockEncoding,
+		be_4b5b,
+		be_nop,
+	},
+};
 
 
-fn pseudoternario (
-	b : &Bit,
-	last_bit : &mut Bit
-) -> PulsePattern {
-
-	let result = match b {
-		Bit::One => PulsePattern{
-			title: String::from("1"),
-			start: Sample::Mid,
-			end: Sample::Mid,
-		},
-		Bit::Zero => if Bit::One == *last_bit {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::Low,
-				end: Sample::Low,
-			}
-		} else {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::High,
-				end: Sample::High,
-			}
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	};
-
-	if Sample::High == result.start {*last_bit = Bit::One} 
-	else if Sample::Low == result.start {*last_bit = Bit::Zero}
-
-	result
-}
-
-fn manchester (
-	b : &Bit,
-	_state : &mut Bit
-) -> PulsePattern {
-	match b {
-		Bit::Zero => PulsePattern{
-			title: String::from("0"),
-			start: Sample::High,
-			end: Sample::Low,
-		},
-		Bit::One => PulsePattern{
-			title: String::from("1"),
-			start: Sample::Low,
-			end: Sample::High,
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	}
-}
-
-fn manchester_dif (
-	b : &Bit,
-	last_bit : &mut Bit
-) -> PulsePattern {
-
-	let result = match b {
-		Bit::Zero => if Bit::One == *last_bit {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::High,
-				end: Sample::Low,
-			}
-			
-		} else {
-			PulsePattern{
-				title: String::from("0"),
-				start: Sample::Low,
-				end: Sample::High,
-			}
-		},
-		Bit::One => if Bit::Zero == *last_bit {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::High,
-				end: Sample::Low,
-			}
-		} else {
-			PulsePattern{
-				title: String::from("1"),
-				start: Sample::Low,
-				end: Sample::High,
-			}
-		},
-		_ => PulsePattern{
-         	title: String::from("No Signal"),
-		 	start: Sample::NoSignal,
-		 	end: Sample::NoSignal,
-		},
-	};
-
-	*last_bit = if Sample::High == result.end {Bit::One} else {Bit::Zero};
-
-	result
-}
 
 
 
 pub struct Encoder {
 	line_encoding : LineEncoding,
 	block_encoding : Option<BlockEncoding>,
-}
-
-pub fn be_4b5b (nibble: Nibble) -> Vec<Bit> {
-    // Lookup table for 4B5B block encoding
-    let table: [[Bit; 5]; 16] = [
-        [Bit::One, Bit::Zero, Bit::Zero, Bit::One, Bit::One],  // 0000
-        [Bit::Zero, Bit::One, Bit::One, Bit::Zero, Bit::Zero],  // 0001
-        [Bit::Zero, Bit::One, Bit::Zero, Bit::One, Bit::One],  // 0010
-        [Bit::Zero, Bit::One, Bit::Zero, Bit::Zero, Bit::One],  // 0011
-        [Bit::One, Bit::Zero, Bit::One, Bit::One, Bit::Zero],  // 0100
-        [Bit::One, Bit::Zero, Bit::One, Bit::Zero, Bit::Zero],  // 0101
-        [Bit::One, Bit::Zero, Bit::Zero, Bit::Zero, Bit::One],  // 0110
-        [Bit::One, Bit::Zero, Bit::Zero, Bit::One, Bit::Zero],  // 0111
-        [Bit::Zero, Bit::One, Bit::One, Bit::Zero, Bit::One],  // 1000
-        [Bit::Zero, Bit::One, Bit::One, Bit::One, Bit::Zero],  // 1001
-        [Bit::Zero, Bit::One, Bit::Zero, Bit::One, Bit::Zero],  // 1010
-        [Bit::One, Bit::One, Bit::Zero, Bit::Zero, Bit::One],  // 1011
-        [Bit::One, Bit::One, Bit::Zero, Bit::One, Bit::Zero],  // 1100
-        [Bit::One, Bit::One, Bit::One, Bit::Zero, Bit::Zero],  // 1101
-        [Bit::One, Bit::One, Bit::One, Bit::Zero, Bit::One],  // 1110
-        [Bit::One, Bit::One, Bit::One, Bit::One, Bit::Zero],  // 1111
-    ];
-
-    // Convert nibble to 5-bit code using lookup table
-    let code = table[nibble.data[0] as usize * 8 + nibble.data[1] as usize * 4 + nibble.data[2] as usize * 2 + nibble.data[3] as usize];
-
-    // Add extra zero bit for DC balance
-    let mut bits = Vec::<Bit>::new();//vec![Bit::Zero];
-    bits.extend_from_slice(&code);
-    bits
-}
-
-pub fn be_nop (nibble : Nibble) -> Vec::<Bit> {
-	let mut bits = Vec::<Bit>::new();
-	bits.extend_from_slice(&nibble.data);
-	bits
 }
 
 
