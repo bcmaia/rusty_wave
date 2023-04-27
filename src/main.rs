@@ -5,7 +5,7 @@
 
 use std::io::{self};
 mod utils;
-use utils::encoding::Encoding;
+use utils::encoder::Encoder;
 
 fn main() {
 	// Read user input
@@ -30,12 +30,12 @@ fn main() {
 	io::stdin().read_line(&mut input).expect("Failed to read input");
 
 	// Creating encoding pipeline
-	let encod = Encoding::new(block_encode_index as u8, line_encode_index as u8);
+	let encod = Encoder::new(block_encode_index as u8, line_encode_index as u8);
 	let text = String::from(input.trim());
 
 	let signal = encod.encode(&text);
 	println!("\n");
-	Encoding::print(&signal);
+	Encoder::print(&signal);
 	println!("\n");
 }
 

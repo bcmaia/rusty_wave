@@ -1,4 +1,4 @@
 pub mod bit;
 pub mod sample;
 pub mod pulse;
-pub mod encoding;
+pub mod encoder;

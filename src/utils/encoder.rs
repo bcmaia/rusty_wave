@@ -222,7 +222,7 @@ fn manchester_dif (
 
 
 
-pub struct Encoding {
+pub struct Encoder {
 	line_encoding : LineEncoding,
 	block_encoding : Option<BlockEncoding>,
 }
@@ -265,9 +265,9 @@ pub fn be_nop (nibble : Nibble) -> Vec::<Bit> {
 
 
 
-impl Encoding {
-	pub fn new (block : u8, line : u8) -> Encoding {
-		Encoding {
+impl Encoder {
+	pub fn new (block : u8, line : u8) -> Encoder {
+		Encoder {
 			line_encoding: match line {
 				0 => nrz,
 				1 => nrzi,

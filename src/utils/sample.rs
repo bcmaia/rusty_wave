@@ -31,22 +31,22 @@ impl Sample {
 
     pub fn print (&self, border : bool, title : &str) {
 		let signals = [
-			"      ┊      ", // 0
-			"┇     ┊      ", // 1
-            "      ┇      ", // 2
-			"      ┆     ┇", // 3
-			"┅┅┅┅┅┅┅┅┅┅┅┅┅", // 4
-			"┅┅┅┅┅┅┊      ", // 5
-			"      ┊┅┅┅┅┅┅", // 6
+			"      ·      ", // 0
+			"┃     ·      ", // 1
+            "      ┃      ", // 2
+			"      ·     ┃", // 3
+			"━━━━━━━━━━━━━", // 4
+			"━━━━━━·      ", // 5
+			"      ·━━━━━━", // 6
 		];
     
 		let s = signals[*self as usize];
 		
 		if border {
-			let s = s.replace(" ", "┈");
-			println!("  ┈┈{}┈┈  {}", s, title);
+			let s = s.replace(" ", "·");
+			println!("  ····{}····  {}", s, title);
 		} else {
-			println!("    {}    {}", s, title);
+			println!("      {}    {}", s, title);
 		}
     }
 }
