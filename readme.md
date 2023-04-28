@@ -10,7 +10,7 @@ Once you have Rust installed, clone or download this repository onto your system
 
 To clone:
 
-`git clone https://github.com/bcmaia/rusty_wave`
+```git clone https://github.com/bcmaia/rusty_wave```
 
 ## Usage
 
