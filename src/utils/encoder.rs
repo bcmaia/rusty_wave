@@ -102,39 +102,6 @@ impl Encoder {
 		pulses
 	}
 
-	pub fn _print (pulses : &Vec<Pulse>) {
-		//let last_index = PULSE_SIZE - 1;
-		//let mid_index = ((PULSE_SIZE as f32) / 2f32).ceil() as usize;
-
-		let mut samples = Vec::new();
-
-		for p in pulses.into_iter() {
-			samples.append(&mut p.separate_samples());
-		}
-
-		let mut interpolated_samples = Vec::new();
-		samples.insert(0, Sample::NoSignal);
-
-		for pair in samples.windows(2) {
-			interpolated_samples.push(Sample::interpolate(&pair[0], &pair[1]));
-		}
-		//interpolated_samples.remove(0);
-		let samples = interpolated_samples;
-
-		let empty_string = String::from("");
-		for (i, sample) in samples.iter().enumerate() {
-			let configs = match i % PULSE_SIZE {
-				0 => (true, &empty_string,),
-				MID_INDEX => (false, &pulses[i / PULSE_SIZE].title,),	// WARNING: HARD CODED
-				_ => (false, &empty_string,),
-			};
-
-			sample._print(configs.0, configs.1);
-		}
-	}
-
-
-
 	pub fn render (pulses : &Vec<Pulse>) -> Vec<String> {
 		let mut samples = pulses
 			.into_iter()

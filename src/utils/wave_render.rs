@@ -48,7 +48,7 @@ pub fn vertical_print (lines : &Vec<String>, position : i32) {
         x += 1;
     }
 
-    println!("\n\n\n");
+    println!("\n");
 }
 
 
