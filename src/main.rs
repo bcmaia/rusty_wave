@@ -5,6 +5,7 @@ use utils::wave_render::vertical_print;
 use utils::pulse::PULSE_SIZE;
 
 fn main() {
+	let mut message = String::new();
 
 	loop {
 		// Read user input
@@ -35,18 +36,17 @@ fn main() {
 		let mut position = 0;
 
 		'inner_loop: loop {
-			println!("\nWrite a sequence of zeros and ones: ");
-			let mut input = String::new();
-			io::stdin().read_line(&mut input).expect("Failed to read input");
+			if 0 == message.len() {
+				println!("\nWrite a sequence of zeros and ones: ");
+				io::stdin().read_line(&mut message).expect("Failed to read input");
+			}
 
 			// Creating encoding pipeline
 			let encod = Encoder::new(block_encode_index as u8, line_encode_index as u8);
-			let text = String::from(input.trim());
+			let text = String::from(message.trim());
 
 			let signal = encod.encode(&text);
 			let render = Encoder::render(&signal);
-
-
 
 			match display_method {
 				1=> {vertical_print(&render, position)},
@@ -71,7 +71,7 @@ fn main() {
 				};
 
 				match choice {
-					0 => break 'menu_loop,
+					0 => {message = String::new(); break 'menu_loop;},
 					1 => return,
 					2 => break 'inner_loop,
 					3 => {position -= PULSE_SIZE as i32; vertical_print(&render, position); ()},
