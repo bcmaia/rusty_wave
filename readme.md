@@ -24,7 +24,7 @@
   
 This is a Rust program that allows users to encode a sequence of zeros and ones using 
 various encoding methods, and display the resulting encoded signal in either vertical 
-or horizontal form.
+or horizontal form. It might help you visualize how the different enconding techniques work. Feel free to use it or modify it however you want :) 
 
 
 ## Installation
