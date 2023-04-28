@@ -9,7 +9,7 @@ fn main() {
 
 	loop {
 		// Read user input
-		println!("\nDisplay method: \n0 > Vertical (default) \n1 > Horizontal");
+		println!("\nDisplay method: \n0 > Vertical (default) \n1 > Horizontal (in development)");
 		let mut input = String::new();
 		io::stdin().read_line(&mut input).expect("Failed to read input");
 		let display_method = match input.trim().parse::<i32>() {
@@ -46,6 +46,9 @@ fn main() {
 			let text = String::from(message.trim());
 
 			let signal = encod.encode(&text);
+			if position < 0 {position = 0}
+			else if position as usize > signal.len() {position = signal.len() as i32 - 1;}
+
 			let render = Encoder::render(&signal);
 
 			match display_method {
@@ -74,8 +77,28 @@ fn main() {
 					0 => {message = String::new(); break 'menu_loop;},
 					1 => return,
 					2 => break 'inner_loop,
-					3 => {position -= PULSE_SIZE as i32; vertical_print(&render, position); ()},
-					4 => {position += PULSE_SIZE as i32; vertical_print(&render, position); ()},
+					3 => {
+						println!("\nShould we move left by how many signals?");
+						let mut input = String::new();
+						io::stdin().read_line(&mut input).expect("Failed to read input");
+						let choice = match input.trim().parse::<i32>() {
+							Ok(x) => x,
+							Err(_) => {println!("ERROR: INVALID INPUT, ASSUMING DEFAULT AS ANSWER.\n\n"); 1}
+						};
+
+						position -= choice * PULSE_SIZE as i32; vertical_print(&render, position); ()
+					},
+					4 => {
+						println!("\nShould we move right by how many signals?");
+						let mut input = String::new();
+						io::stdin().read_line(&mut input).expect("Failed to read input");
+						let choice = match input.trim().parse::<i32>() {
+							Ok(x) => x,
+							Err(_) => {println!("ERROR: INVALID INPUT, ASSUMING DEFAULT AS ANSWER.\n\n"); 1}
+						};
+
+						position += choice * PULSE_SIZE as i32; vertical_print(&render, position); ()
+					},
 					_ => (),
 				}
 			}

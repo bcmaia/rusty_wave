@@ -16,8 +16,11 @@ pub fn vertical_print (lines : &Vec<String>, position : i32) {
 
     println!("{}", (0..height).map(|_| {"\n"}).collect::<Vec<_>>().join(""));
 
-    let mut x : usize = if 0 <= position {0} else {(-position) as usize};
-    let position = position as usize;
+    let mut x : usize = 0;
+    let position = 
+        if position < 0 {0}
+        else if position as usize >= lines.len() {lines.len() - 1}
+        else {position as usize};
 
     for w in position..(width + position) {
         let mut y : usize = 0;
@@ -48,7 +51,7 @@ pub fn vertical_print (lines : &Vec<String>, position : i32) {
         x += 1;
     }
 
-    println!("\n");
+    println!("");
 }
 
 
