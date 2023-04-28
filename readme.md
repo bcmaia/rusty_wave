@@ -10,13 +10,15 @@ Once you have Rust installed, clone or download this repository onto your system
 
 To clone:
 
-```git clone https://github.com/bcmaia/rusty_wave```
+```
+    git clone https://github.com/bcmaia/rusty_wave
+```
 
 ## Usage
 
 To use the program, navigate to the directory where the program is located and run the following command in your terminal:
 
-> cargo run --release
+> ```cargo run --release```
 
 It might take a while to compile :p
 
