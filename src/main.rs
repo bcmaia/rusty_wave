@@ -9,7 +9,7 @@ fn main() {
 
 	loop {
 		// Read user input
-		println!("\nDisplay method: \n0 > Vertical (default) \n1 > Horizontal (in development)");
+		println!("\nDisplay method: \n0 > Vertical (default) \n1 > Horizontal");
 		let mut input = String::new();
 		io::stdin().read_line(&mut input).expect("Failed to read input");
 		let display_method = match input.trim().parse::<i32>() {
