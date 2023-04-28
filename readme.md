@@ -1,4 +1,4 @@
-# Rust Signal Encoder
+# Rusty Wave : A Rust Signal Encoding
 
 ```
 ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     
