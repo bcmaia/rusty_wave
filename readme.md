@@ -19,7 +19,7 @@ To clone:
 To use the program, navigate to the directory where the program is located and run the following command in your terminal:
 
 ```
-    cargo run --release
+cargo run --release
 ```
 
 It might take a while to compile :p
