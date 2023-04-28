@@ -21,14 +21,14 @@ const MATRIX : [[Sample; 7]; 7] = [
     /* MidToHigh*/ [Sample::NoSignal, 	Sample::Low, 		Sample::Mid, 		Sample::High, 		Sample::LowToHigh, 	Sample::LowToMid,	Sample::MidToHigh],
 ];
 
-const SIGNALS : [&str; 7] = [
+pub const SIGNALS : [&str; 7] = [
     "      ·      ", // 0
     "┃     ·      ", // 1
     "      ┃      ", // 2
     "      ·     ┃", // 3
-    "━━━━━━━━━━━━━", // 4
-    "━━━━━━·      ", // 5
-    "      ·━━━━━━", // 6
+    "·━━━━━·━━━━━·", // 4
+    "·━━━━━·      ", // 5
+    "      ·━━━━━·", // 6
 ];
 
 impl Sample {
@@ -66,7 +66,7 @@ impl Sample {
 		
 		if border {
 			let s = s.replace(" ", "·");
-			println!("  ····{}····{}", s, title);
+			println!("     ·{}·   {}", s, title);
 		} else {
 			println!("      {}    {}", s, title);
 		}
@@ -88,9 +88,9 @@ impl Sample {
         let result;
         if border {
             let s = s.replace(" ", "·");
-            result = format!("  ····{}····{}", s, title);
+            result = format!("   ·{}·   {}", s, title);
         } else {
-            result = format!("      {}    {}", s, title);
+            result = format!("    {}    {}", s, title);
         }
 
         result

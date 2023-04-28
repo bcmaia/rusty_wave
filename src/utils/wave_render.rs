@@ -1,15 +1,16 @@
+
 use term_size::dimensions_stdout;
 use crossterm::{cursor, execute};
 extern crate unicode_segmentation;
 //use unicode_segmentation::UnicodeSegmentation;
 
 pub fn vertical_print (lines : &Vec<String>, position : i32) {
-    let lines = lines
+    let mut lines = lines
         .iter()
         .map(|s| {s.clone()})
         .collect::<Vec<String>>();
 
-    //_pad_strings(&mut lines);
+    pad_strings(&mut lines);
 
     let (width, height) = dimensions_stdout().unwrap();
 
@@ -51,17 +52,22 @@ pub fn vertical_print (lines : &Vec<String>, position : i32) {
 }
 
 
-fn _pad_strings(strings: &mut Vec<String>) {
+fn pad_strings(strings: &mut Vec<String>) {
     // Find the maximum length of all strings in the vector
     let max_len = strings.iter().map(|s| s.len()).max().unwrap();
 
     // Pad each string with spaces to make them all the same length
     for s in strings {
-        let padding = max_len - s.len();
+		// Quick Fix
+		//if s.contains("━·━") {s.remove(0);}
+    
+    	if s.len() >= max_len {continue;}
+        let padding = max_len - s.len() + 2;
         if padding > 0 {
             s.push_str(&" ".repeat(padding));
-            s.push_str(&"x");
-            s.insert(0, 'x');
+            //s.push_str(&"x");
+            //s.insert_str(0, "x");
         }
+
     }
 }
