@@ -5,28 +5,29 @@ pub enum Bit {
     NotSet = 2,
 }
 
+#[derive(Clone, Copy, PartialEq)]
 pub struct Nibble {
 	pub data : [Bit; 4],
 }
 
 impl Bit {
-    // pub fn toggle(&self) -> Bit {
-    //     match self {
-    //         Bit::Zero => Bit::One,
-    //         Bit::One => Bit::Zero,
-    //         Bit::NotSet => Bit::NotSet,
-    //     }
-    // }
+    pub fn _toggle(self) -> Bit {
+        match self {
+            Bit::Zero => Bit::One,
+            Bit::One => Bit::Zero,
+            Bit::NotSet => Bit::NotSet,
+        }
+    }
 
-    // pub fn to_bool (&self) -> bool {
-    // 	match self {
-    // 		Bit::Zero => false,
-    // 		Bit::One => true,
-    // 		Bit::NotSet => false,
-    // 	}
-    // }
+	pub fn _to_bool (self) -> bool {
+		match self {
+			Bit::Zero => false,
+			Bit::One => true,
+			Bit::NotSet => false,
+		}
+	}
 
-	pub fn char_to_bit (c : &char) -> Bit {
+	pub fn char_to_bit (c : char) -> Bit {
 		match c {
 		    '0' => Bit::Zero,
 			'1' => Bit::One,
@@ -35,24 +36,19 @@ impl Bit {
 	}
 
     pub fn string_to_bits (s : &String) -> Vec<Bit> {
-    	let mut v = Vec::<Bit>::new();
-    	for c in s.chars() {
-    		v.push(Bit::char_to_bit(&c));
-        }
-   
-    	v
+    	s.chars().map( |c| {Bit::char_to_bit(c)} ).collect::<Vec<Bit>>()
 	}
 
-	pub fn define (&self) -> Bit {
-		if Bit::NotSet == *self {Bit::Zero}
-		else {*self}
+	pub fn define (self) -> Bit {
+		if Bit::NotSet == self {Bit::Zero}
+		else {self}
 	}
 }
 
 
 
 impl Nibble {
-	pub fn define (&self) -> Nibble {
+	pub fn define (self) -> Nibble {
 		Nibble {
 			data: [
 				self.data[0].define(),
@@ -73,8 +69,9 @@ impl Nibble {
 	        	nibble.data[i] = *bit;
 	        }
 	        
-	        nibbles.push(nibble.define());
+	        nibbles.push(nibble);
 	    }
+
 	    nibbles
 	}
 }

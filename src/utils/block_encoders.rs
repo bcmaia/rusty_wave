@@ -5,8 +5,6 @@ use super::{
 
 pub type BlockEncoding = fn(Nibble) -> Vec::<Bit>;
 
-
-
 pub fn be_4b5b (nibble: Nibble) -> Vec<Bit> {
     // Lookup table for 4B5B block encoding
     let table: [[Bit; 5]; 16] = [

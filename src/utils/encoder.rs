@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use super::{
 	bit::{Bit, Nibble},
 	sample::Sample,
@@ -50,20 +51,26 @@ impl Encoder {
 	}
 	
 	pub fn block_encode (&self, bits : &Vec::<Bit>) -> Vec<Bit> {
-		let nibbles = Nibble::to_nibbles(bits);
-		let mut encoded_bits = Vec::new();
+		// Breaking the bits in nibbles
+		let nibbles = Nibble::to_nibbles(bits); 
+		// Making sure we have no "Not Set" bit
+		let nibbles = 
+			nibbles.par_iter() // Using par_iter() to get a parallel iterator
+			.map(|nibble| nibble.define()).collect::<Vec<_>>()
+		;
 
 		let enc = match self.block_encoding {
 			Some(x) => x,
 			None => be_nop, // Obs: should not happen, but if it does...
 		};
-		
-		for nibble in nibbles {
-		    let mut encoded_block = enc(nibble);
-			encoded_bits.append(&mut encoded_block);
-		}
-		
-		encoded_bits
+
+		let encoded_bits = nibbles
+			.into_par_iter()
+			.map(|nibble| {enc(nibble)} )
+			.collect::<Vec<_>>()
+		;
+
+		encoded_bits.into_iter().flatten().collect()
 	}
 
 	pub fn line_encode (&self, bits : &Vec::<Bit>) -> Vec<PulsePattern> {
@@ -86,16 +93,16 @@ impl Encoder {
 		};
 
 		let patterns = self.line_encode(&bits);
-		let mut pulses = Vec::new();
-		
-		for p in patterns.into_iter() {
-			pulses.push(Pulse::from_pattern(&p));
-		}
+		let pulses = patterns
+			.into_iter()
+			.map( |p| {Pulse::from_pattern(&p)} )
+			.collect::<Vec<_>>()
+		;
 
 		pulses
 	}
 
-	pub fn print (pulses : &Vec<Pulse>) {
+	pub fn _print (pulses : &Vec<Pulse>) {
 		//let last_index = PULSE_SIZE - 1;
 		//let mid_index = ((PULSE_SIZE as f32) / 2f32).ceil() as usize;
 
@@ -122,9 +129,43 @@ impl Encoder {
 				_ => (false, &empty_string,),
 			};
 
-			sample.print(configs.0, configs.1);
+			sample._print(configs.0, configs.1);
 		}
 	}
 
+
+
+	pub fn render (pulses : &Vec<Pulse>) -> Vec<String> {
+		let mut samples = pulses
+			.into_iter()
+			.map( |p| {p.separate_samples()} )
+			.into_iter()
+			.flatten()
+			.collect::<Vec<_>>()
+		;
+
+		samples.insert(0, Sample::NoSignal);
+
+		let interpolated_samples = samples
+			.windows(2)
+			.map(|pair| {Sample::interpolate(&pair[0], &pair[1])})
+			.collect::<Vec<_>>()
+		;
+
+		let empty_string = String::from("");
+		let mut result = Vec::new();
+		for (i, sample) in interpolated_samples.iter().enumerate() {
+			let configs = match i % PULSE_SIZE {
+				0 => (true, &empty_string,),
+				MID_INDEX => (false, &pulses[i / PULSE_SIZE].title,),	// WARNING: HARD CODED
+				_ => (false, &empty_string,),
+			};
+
+			result.push(sample.render(configs.0, configs.1));
+		}
+
+		result
+	}
+	
 	
 }
