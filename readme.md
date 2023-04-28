@@ -1,48 +1,30 @@
 # Rust Signal Encoder
 
-<table>
-    <tr>
-        <td>
-            This is a Rust program that allows users to encode a sequence of zeros and ones using 
-            various encoding methods, and display the resulting encoded signal in either vertical 
-            or horizontal form.
-        </td>
-        <td>
-            
-             ··┃··············      
-               ┃     ·            
-               ┃     ·          
-               ·━━━━━·━━━━━·   0    
-                     ·     ┃        
-                     ·     ┃        
-             ···━━━━━·━━━━━···      
-               ┃     ·            
-               ┃     ·            
-               ·━━━━━·━━━━━·   1    
-                     ·     ┃      
-                     ·     ┃      
-             ···━━━━━·━━━━━···    
-               ┃     ·              
-               ┃     ·    
-               ·━━━━━·━━━━━·   1    
-                     ·     ┃  
-                     ·     ┃  
-             ··············┃··  
-                     ·     ┃  
-                     ·     ┃  
-               ·━━━━━·━━━━━·   0  
-               ┃     ·  
-               ┃     ·  
-             ··┃··············  
-               ┃     ·  
-               ┃     ·  
-               ·━━━━━·━━━━━·   0  
-                     ·     ┃  
-                     ·     ┃  
-             ···━━━━━·━━━━━···  
-        </td>
-   </tr>
-</table>
+·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·       
+·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·       
+━━━·  ·━━·  ·━━·  ·  ·━━━━━·  ·━━·  ·  ·━━·  ·━━·  ·━━·  ·━━━━━·  ·  ·━━  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃    
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃   
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+········································································  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  ┃  ┃  ·  ┃  ┃  ┃  ┃  ┃  ┃  ┃  ·  ┃  ·  ┃  
+·  ·━━·  ·━━·  ·━━━━━·  ·  ·━━·  ·━━━━━·  ·━━·  ·━━·  ·━━·  ·  ·━━━━━·  
+·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     
+·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     ·     
+  
+   0     1     1     0     0     1     0     1     1     1     0     0   
+   
+  
+This is a Rust program that allows users to encode a sequence of zeros and ones using 
+various encoding methods, and display the resulting encoded signal in either vertical 
+or horizontal form.
+
 
 ## Installation
 
